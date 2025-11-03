@@ -1,0 +1,94 @@
+[
+    {
+        "id": 1,
+        "f_name": "John",
+        "l_name": "Doe",
+        "gender": "male",
+        "phone": "1234567890",
+        "date_of_birth": "1990-01-01",
+        "joined_date": "2023-01-01",
+        "address": "123 Main St, City, Country",
+        "email": "john@example.com",
+        "username": "johndoe",
+        "height": "180",
+        "weight": "80",
+        "trainer_id": "1",
+        "member_username": [
+            "ducanh",
+            "khanhan"
+        ]
+    },
+    {
+        "id": 2,
+        "f_name": "Jane",
+        "l_name": "Smith",
+        "gender": "Female",
+        "phone": "0987654321",
+        "date_of_birth": "1995-05-15",
+        "joined_date": "2023-02-01",
+        "address": "456 Elm St, City, Country",
+        "email": "jane@gmail.com",
+        "username": "janesmith",
+        "height": 180,
+        "weight": 80,
+        "trainer_id": 2,
+        "member_username": [
+            "phucdu",
+            "ductien",
+            "thanhhao"
+        ]
+    },
+    {
+        "id": 3,
+        "f_name": "Alice",
+        "l_name": "Johnson",
+        "name": "Alice",
+        "gender": "Female",
+        "phone": "5551234567",
+        "date_of_birth": "2000-12-31",
+        "joined_date": "2023-03-01",
+        "address": "789 Oak St, City, Country",
+        "email": "alice@fpt.edu.vn",
+        "username": "alicejohnson",
+        "height": "180",
+        "weight": "80",
+        "trainer_id": "3",
+        "member_username": [
+            "ducuc"
+        ]
+    },
+    {
+        "f_name": "aaaaaaaaa",
+        "l_name": "aaaaaaa",
+        "gender": "male",
+        "phone": "aaaaaaaaa",
+        "date_of_birth": "2000-01-01",
+        "joined_date": "2025-07-12",
+        "address": "aaaa",
+        "email": "aaaaa",
+        "username": "aaaaaaa",
+        "height": 180,
+        "weight": 80,
+        "trainer_id": 4,
+        "member_username": []
+    },
+    {
+        "id": 7,
+        "f_name": "tr",
+        "l_name": "tr",
+        "gender": "Male",
+        "phone": "1234567890",
+        "date_of_birth": "1990-01-01",
+        "joined_date": "2023-01-01",
+        "address": "123 Main St, City, Country",
+        "email": "john@example.com",
+        "username": "tr",
+        "height": "180",
+        "weight": "80",
+        "trainer_id": "1",
+        "member_username": [
+            "thanhhao",
+            "khanhan"
+        ]
+    }
+]

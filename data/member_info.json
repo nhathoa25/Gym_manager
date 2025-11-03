@@ -1,0 +1,259 @@
+[
+    {
+        "id": 1,
+        "f_name": "Duc",
+        "l_name": "Anh",
+        "gender": "Male",
+        "phone": "1234567890",
+        "date_of_birth": "1990-01-01",
+        "joined_date": "2023-01-01",
+        "address": "123 Main St, City, Country",
+        "email": "john@example.com",
+        "membership": "1 Months",
+        "subscription_expiry": "2025-09-01",
+        "username": "ducanh",
+        "attendance_days": [
+            "2025-07-03",
+            "2025-07-04",
+            "2025-07-01",
+            "2025-10-22"
+        ],
+        "workout_days": [
+            [
+                "2025-07-03",
+                "100 Push-up, 10 jump rope"
+            ],
+            [
+                "2025-07-04",
+                "50 Squat, 20 Burpees"
+            ],
+            [
+                "2025-07-24",
+                "Chay 100km"
+            ]
+        ],
+        "trainer_username": "johndoe"
+    },
+    {
+        "id": 2,
+        "f_name": "kha",
+        "l_name": "nhan",
+        "gender": "Female",
+        "phone": "0987654321",
+        "date_of_birth": "1995-05-15",
+        "joined_date": "2023-02-01",
+        "address": "456 Elm St, City, Country",
+        "email": "jane@gmail.com",
+        "membership": "12 Months",
+        "subscription_expiry": "2026-8-01",
+        "username": "khanhan",
+        "attendance_days": [
+            "2025-07-03",
+            "2025-07-04"
+        ],
+        "workout_days": [
+            [
+                "2025-07-03",
+                "100 Push-up, 10 jump rope"
+            ],
+            [
+                "2025-07-04",
+                "50 Squat, 20 Burpees"
+            ],
+            [
+                "2025-07-22",
+                "Nhay day 100000 cai"
+            ],
+            [
+                "2025-07-23",
+                "hit dat 900 c\u00e1i"
+            ]
+        ],
+        "trainer_username": "johndoe"
+    },
+    {
+        "id": 3,
+        "f_name": "Thanh",
+        "l_name": "Hao",
+        "gender": "Female",
+        "phone": "5551234567",
+        "date_of_birth": "2000-12-31",
+        "joined_date": "2023-03-01",
+        "address": "789 Oak St, City, Country",
+        "email": "alice@fpt.edu.vn",
+        "membership": "Lifetime",
+        "subscription_expiry": "2199-01-01",
+        "username": "thanhhao",
+        "attendance_days": [
+            "2025-07-03",
+            "2025-07-04"
+        ],
+        "workout_days": [
+            [
+                "2025-07-03",
+                "100 Push-up, 10 jump rope"
+            ],
+            [
+                "2025-07-04",
+                "50 Squat, 20 Burpees"
+            ]
+        ],
+        "trainer_username": "janesmith"
+    },
+    {
+        "id": 4,
+        "f_name": "Duc",
+        "l_name": "Tien",
+        "gender": "Female",
+        "phone": "5551244467",
+        "date_of_birth": "2000-12-31",
+        "joined_date": "2024-03-01",
+        "address": "789 Oak St, City, Country",
+        "email": "aaadasd@fpt.edu.vn",
+        "membership": "Lifetime",
+        "subscription_expiry": "2199-01-01",
+        "username": "ductien",
+        "attendance_days": [
+            "2025-07-03",
+            "2025-07-04"
+        ],
+        "workout_days": [
+            [
+                "2025-07-03",
+                "100 Push-up, 10 jump rope"
+            ],
+            [
+                "2025-07-04",
+                "50 Squat, 20 Burpees"
+            ]
+        ],
+        "trainer_username": "janesmith"
+    },
+    {
+        "id": 5,
+        "f_name": "Phuc",
+        "l_name": "Du",
+        "gender": "Female",
+        "phone": "551234567",
+        "date_of_birth": "2000-12-31",
+        "joined_date": "2023-03-01",
+        "address": "789 Oak St, City, Country",
+        "email": "alas@fpt.edu.vn",
+        "membership": "Lifetime",
+        "subscription_expiry": "2199-01-01",
+        "username": "phucdu",
+        "attendance_days": [
+            "2025-07-03",
+            "2025-07-04"
+        ],
+        "workout_days": [
+            [
+                "2025-07-03",
+                "100 Push-up, 10 jump rope"
+            ],
+            [
+                "2025-07-04",
+                "50 Squat, 20 Burpees"
+            ]
+        ],
+        "trainer_username": "janesmith"
+    },
+    {
+        "id": 6,
+        "f_name": "Duc",
+        "l_name": "Em",
+        "name": "Duc Em",
+        "gender": "male",
+        "phone": "0123123123",
+        "date_of_birth": "2006-01-01",
+        "joined_date": "2025-07-22",
+        "address": "c\u00e2y \u0110a, \u0111\u1ea7u L\u00e0ng, x\u00f3m Mai",
+        "email": "emo@gmail.com",
+        "membership": "12 Months",
+        "subscription_expiry": "2026-07-21",
+        "username": "ducem",
+        "attendance_days": [
+            "2025-07-03",
+            "2025-07-04"
+        ],
+        "workout_days": [
+            [
+                "2025-07-03",
+                "100 Push-up, 10 jump rope"
+            ],
+            [
+                "2025-07-04",
+                "50 Squat, 20 Burpees"
+            ]
+        ],
+        "trainer_username": "janesmith"
+    },
+    {
+        "id": 7,
+        "f_name": "d",
+        "l_name": "d",
+        "name": "d d",
+        "gender": "male",
+        "phone": "dd",
+        "date_of_birth": "2000-01-01",
+        "joined_date": "2025-07-22",
+        "address": "d",
+        "email": "d",
+        "membership": "1 Months",
+        "subscription_expiry": "2025-08-21",
+        "username": "d",
+        "attendance_days": [
+            "2025-07-03",
+            "2025-07-04"
+        ],
+        "workout_days": [
+            [
+                "2025-07-03",
+                "100 Push-up, 10 jump rope"
+            ],
+            [
+                "2025-07-04",
+                "50 Squat, 20 Burpees"
+            ]
+        ],
+        "trainer_username": "johndoe"
+    },
+    {
+        "id": 8,
+        "f_name": "Duc",
+        "l_name": "Uc",
+        "name": "Duc Uc",
+        "gender": "male",
+        "phone": "123123123123",
+        "date_of_birth": "2000-01-05",
+        "joined_date": "2025-07-22",
+        "address": "l\u00f2ng \u0110\u1ea5t, con Giun, Con Heo",
+        "email": "aloalo@gmail.com",
+        "membership": "3 Months",
+        "subscription_expiry": "2025-10-20",
+        "username": "ducuc",
+        "attendance_days": [],
+        "workout_days": [],
+        "trainer_username": "alicejohnson"
+    },
+    {
+        "id": 9,
+        "f_name": "Anh",
+        "l_name": "Anh",
+        "name": "Anh Anh",
+        "gender": "male",
+        "phone": "6868686868",
+        "date_of_birth": "2000-01-05",
+        "joined_date": "2025-07-23",
+        "address": "c\u00e2y \u0111a",
+        "email": "conheo@gmail.com",
+        "membership": "12 Months",
+        "subscription_expiry": "2026-07-23",
+        "username": "anhanh",
+        "attendance_days": [
+            "2025-07-24"
+        ],
+        "workout_days": [],
+        "trainer_username": "johndoe"
+    }
+]

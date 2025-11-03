@@ -1,0 +1,42 @@
+[
+    {
+        "username": "admin_test1",
+        "password": "0000000000",
+        "role": "admin"
+    },
+    {
+        "username": "ad",
+        "password": "ad",
+        "role": "admin"
+    },
+    {
+        "username": "trainer_test1",
+        "password": "1111111111",
+        "role": "trainer"
+    },
+    {
+        "username": "member_test1",
+        "password": "2222222222",
+        "role": "member"
+    },
+    {
+        "username": "tr",
+        "password": "tr",
+        "role": "trainer"
+    },
+    {
+        "username": "ducanh",
+        "password": "ducanh",
+        "role": "member"
+    },
+    {
+        "username": "nhathoa",
+        "password": "nhathoa2006",
+        "role": "member"
+    },
+    {
+        "username": "hoahn@123.com",
+        "password": "12345",
+        "role": "member"
+    }
+]
