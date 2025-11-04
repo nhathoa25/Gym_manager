@@ -4,7 +4,7 @@ from PIL import Image, ImageTk
 def c_background(window: tk.Tk):
 
     # Load and resize the background image
-    bg_image = Image.open("assets/background_v2.png")
+    bg_image = Image.open("assets/background_admin.png")
     #bg_image = Image.open("assets/gym_icon.png")
     bg_image = bg_image.resize((window.winfo_screenwidth(),window.winfo_screenheight()))  # Match your window size
     bg_photo = ImageTk.PhotoImage(bg_image)
