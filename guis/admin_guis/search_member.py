@@ -12,340 +12,305 @@ def load_trainers():
     except Exception:
         return []
 
+def read_subscription_info():
+    """Đọc thông tin gói tập để lấy danh sách"""
+    try:
+        with open("data/subscription_info.json", 'r') as f:
+            subscription_data = json.load(f)
+        return list(subscription_data.keys())
+    except (FileNotFoundError, json.JSONDecodeError):
+        return ["1 Months", "3 Months", "6 Months", "12 Months"]
+
 def on_search_member(root, admin):
     root.title("Search and Edit Member")
-    text_label = tk.Label(root, text="Search and Edit Member", font=("Arial", 24), bg=root["bg"])
+    
+    text_label = ttk.Label(root, text="Search and Edit Member", font=("Arial", 24))
     text_label.pack(pady=20)
 
-    main_frame = tk.Frame(root, bg=root["bg"])
+    main_frame = ttk.Frame(root)
     main_frame.pack(padx=20, pady=10, fill="both", expand=True)
 
     # Search frame
-    search_frame = tk.Frame(main_frame, bg=root["bg"])
+    search_frame = ttk.Frame(main_frame)
     search_frame.pack(fill="x", pady=10)
 
-    search_label = tk.Label(search_frame, text="Search by Name:", font=("Arial", 12), bg=root["bg"])
+    search_label = ttk.Label(search_frame, text="Search by Name:", font=("Arial", 12))
     search_label.pack(side="left", padx=(0, 10))
 
     search_var = tk.StringVar()
-    search_entry = tk.Entry(search_frame, textvariable=search_var, font=("Arial", 12), width=30)
+    search_entry = ttk.Entry(search_frame, textvariable=search_var, font=("Arial", 12), width=30)
     search_entry.pack(side="left", padx=(0, 10))
 
-    # Results frame
-    results_frame = tk.Frame(main_frame, bg=root["bg"])
+    # Results frame (SẼ ĐƯỢC ẨN/HIỆN)
+    results_frame = ttk.Frame(main_frame)
     results_frame.pack(fill="both", expand=True, pady=10)
 
-    # Create Treeview for search results
     columns = ("Username", "First Name", "Last Name", "Email", "Phone", "Membership", "Expiry")
     tree = ttk.Treeview(results_frame, columns=columns, show="headings", height=8)
     
-    # Set column headings
     for col in columns:
         tree.heading(col, text=col)
         tree.column(col, width=120)
 
-    # Add scrollbar
     scrollbar = ttk.Scrollbar(results_frame, orient="vertical", command=tree.yview)
     tree.configure(yscrollcommand=scrollbar.set)
     
     tree.pack(side="left", fill="both", expand=True)
     scrollbar.pack(side="right", fill="y")
 
-    # Edit frame (initially hidden)
-    edit_frame = tk.Frame(main_frame, bg=root["bg"])
+    # === TỐI ƯU HÓA: Tạo form chỉnh sửa 1 LẦN (ban đầu ẩn) ===
+    edit_frame = ttk.Frame(main_frame) 
+    entries = {} 
+
+    def cancel_edit():
+        """SỬA LỖI: Ẩn form edit VÀ hiện lại bảng results"""
+        edit_frame.pack_forget()
+        results_frame.pack(fill="both", expand=True, pady=10) # Hiện lại
+
+    def create_edit_form_structure():
+        """Tạo cấu trúc form 1 lần, lưu widget vào 'entries'"""
+        
+        form_grid = ttk.Frame(edit_frame)
+        form_grid.pack(fill="x", expand=True)
+        
+        form_grid.columnconfigure(1, weight=1) 
+        
+        fields = [
+            ("First Name", "f_name"), ("Last Name", "l_name"),
+            ("Phone", "phone"), ("Address", "address"),
+            ("Email", "email")
+        ]
+        
+        row_index = 0
+        for label_text, key in fields:
+            label = ttk.Label(form_grid, text=label_text, font=("Arial", 11))
+            label.grid(row=row_index, column=0, sticky="w", padx=10, pady=5)
+            
+            entry = ttk.Entry(form_grid, font=("Arial", 11))
+            entry.grid(row=row_index, column=1, sticky="ew", padx=10, pady=5)
+            entries[key] = entry
+            row_index += 1
+        
+        # Gender
+        label = ttk.Label(form_grid, text="Gender", font=("Arial", 11))
+        label.grid(row=row_index, column=0, sticky="w", padx=10, pady=5)
+        gender_var = tk.StringVar()
+        gender_frame = ttk.Frame(form_grid)
+        gender_frame.grid(row=row_index, column=1, sticky="w", padx=10, pady=5) # sticky 'w'
+        male_radio = ttk.Radiobutton(gender_frame, text="Male", variable=gender_var, value="male")
+        male_radio.pack(side="left", padx=(0, 20))
+        female_radio = ttk.Radiobutton(gender_frame, text="Female", variable=gender_var, value="female")
+        female_radio.pack(side="left")
+        entries["gender"] = gender_var
+        row_index += 1
+        
+        # DOB
+        label = ttk.Label(form_grid, text="Date of Birth", font=("Arial", 11))
+        label.grid(row=row_index, column=0, sticky="w", padx=10, pady=5)
+        dob_calendar = DateEntry(form_grid, background='darkblue', foreground='white', 
+                               borderwidth=2, date_pattern='yyyy-mm-dd', maxdate=datetime.now())
+        dob_calendar.grid(row=row_index, column=1, sticky="ew", padx=10, pady=5)
+        entries["date_of_birth"] = dob_calendar
+        row_index += 1
+        
+        # Joined Date
+        label = ttk.Label(form_grid, text="Joined Date", font=("Arial", 11))
+        label.grid(row=row_index, column=0, sticky="w", padx=10, pady=5)
+        joined_calendar = DateEntry(form_grid, background='darkblue', foreground='white', 
+                                  borderwidth=2, date_pattern='yyyy-mm-dd', maxdate=datetime.now())
+        joined_calendar.grid(row=row_index, column=1, sticky="ew", padx=10, pady=5)
+        entries["joined_date"] = joined_calendar
+        row_index += 1
+        
+        # Membership
+        label = ttk.Label(form_grid, text="Membership", font=("Arial", 11))
+        label.grid(row=row_index, column=0, sticky="w", padx=10, pady=5)
+        membership_options = read_subscription_info()
+        membership_var = tk.StringVar()
+        membership_dropdown = ttk.Combobox(form_grid, textvariable=membership_var, values=membership_options, 
+                                          state="readonly", font=("Arial", 10))
+        membership_dropdown.grid(row=row_index, column=1, sticky="ew", padx=10, pady=5)
+        entries["membership"] = membership_var
+        row_index += 1
+        
+        # Trainer
+        label = ttk.Label(form_grid, text="Trainer Username", font=("Arial", 11))
+        label.grid(row=row_index, column=0, sticky="w", padx=10, pady=5)
+        trainer_list = load_trainers()
+        trainer_usernames = [t[0] for t in trainer_list]
+        trainer_var = tk.StringVar()
+        trainer_dropdown = ttk.Combobox(form_grid, textvariable=trainer_var, values=trainer_usernames, 
+                                        state="readonly", font=("Arial", 10))
+        trainer_dropdown.grid(row=row_index, column=1, sticky="ew", padx=10, pady=5)
+        entries["trainer_username"] = trainer_var
+        row_index += 1
+        
+        # Expiry
+        label = ttk.Label(form_grid, text="Subscription Expiry", font=("Arial", 11))
+        label.grid(row=row_index, column=0, sticky="w", padx=10, pady=5)
+        expiry_calendar = DateEntry(form_grid, background='darkblue', foreground='white', 
+                                   borderwidth=2, date_pattern='yyyy-mm-dd')
+        expiry_calendar.grid(row=row_index, column=1, sticky="ew", padx=10, pady=5)
+        entries["subscription_expiry"] = expiry_calendar
+        row_index += 1
+        
+        def update_expiry_date(*args):
+            try:
+                membership = membership_var.get()
+                joined_date = joined_calendar.get_date()
+                sub_map = {}
+                try:
+                    with open("data/subscription_info.json", 'r') as f:
+                        data = json.load(f)
+                        sub_map = {plan: details[0] for plan, details in data.items()}
+                except:
+                    sub_map = { "1 Months": 30, "3 Months": 90, "6 Months": 180, "12 Months": 365, "36 Months": 365*3, "Lifetime": 365*100 }
+
+                days = sub_map.get(membership, 30)
+                expiry_date = joined_date + timedelta(days=days)
+                expiry_calendar.set_date(expiry_date)
+            except Exception:
+                pass 
+        
+        membership_var.trace('w', update_expiry_date)
+        joined_calendar.bind("<<DateEntrySelected>>", update_expiry_date)
+
+        # Khung nút
+        button_frame = ttk.Frame(edit_frame)
+        button_frame.pack(pady=10)
+
+        entries["save_btn"] = ttk.Button(button_frame, text="Save Changes", style="Success.TButton")
+        entries["save_btn"].pack(side="left", padx=10)
+        
+        entries["delete_btn"] = ttk.Button(button_frame, text="Delete Member", style="Danger.TButton")
+        entries["delete_btn"].pack(side="left", padx=10)
+        
+        # SỬA LỖI: Nút Cancel phải gọi hàm cancel_edit
+        cancel_btn = ttk.Button(button_frame, text="Cancel", command=cancel_edit, style="Warning.TButton")
+        cancel_btn.pack(side="left", padx=10)
     
-    # Variables for edit form
-    edit_entries = {}
-    
+    # === Kết thúc tạo form ===
+
     def load_all_members():
-        """Load and display all members"""
-        # Clear previous results
-        for item in tree.get_children():
-            tree.delete(item)
-        
-        # Get all members (empty search term returns all members)
+        for item in tree.get_children(): tree.delete(item)
         all_members = admin.search_members("")
-        
         for member in all_members:
             tree.insert("", "end", values=(
-                member.get('username', 'N/A'),
-                member.get('f_name', 'N/A'),
-                member.get('l_name', 'N/A'),
-                member.get('email', 'N/A'),
-                member.get('phone', 'N/A'),
-                member.get('membership', 'N/A'),
+                member.get('username', 'N/A'), member.get('f_name', 'N/A'),
+                member.get('l_name', 'N/A'), member.get('email', 'N/A'),
+                member.get('phone', 'N/A'), member.get('membership', 'N/A'),
                 member.get('subscription_expiry', 'N/A')
             ))
     
     def search_members():
-        """Search members by name using admin method"""
         search_term = search_var.get().strip()
-        
-        # Clear previous results
-        for item in tree.get_children():
-            tree.delete(item)
+        for item in tree.get_children(): tree.delete(item)
         
         if not search_term:
-            # If no search term, show all members
             load_all_members()
             return
         
-        # Use admin's search method
         found_members = admin.search_members(search_term)
-        
         for member in found_members:
             tree.insert("", "end", values=(
-                member.get('username', 'N/A'),
-                member.get('f_name', 'N/A'),
-                member.get('l_name', 'N/A'),
-                member.get('email', 'N/A'),
-                member.get('phone', 'N/A'),
-                member.get('membership', 'N/A'),
+                member.get('username', 'N/A'), member.get('f_name', 'N/A'),
+                member.get('l_name', 'N/A'), member.get('email', 'N/A'),
+                member.get('phone', 'N/A'), member.get('membership', 'N/A'),
                 member.get('subscription_expiry', 'N/A')
             ))
-        
         if not found_members:
             messagebox.showinfo("No Results", f"No members found matching '{search_term}'")
 
-    def on_select_member(event):
-        """Handle member selection for editing"""
-        selection = tree.selection()
-        if not selection:
+    def save_changes(member_username):
+        values = {}
+        for key, entry in entries.items():
+            if key in ["save_btn", "delete_btn"]: continue
+            
+            if isinstance(entry, DateEntry):
+                values[key] = entry.get_date().strftime('%Y-%m-%d')
+            else:
+                values[key] = entry.get()
+        
+        if any(v == "" for v in values.values()):
+            messagebox.showerror("Error", "All fields must be filled!")
             return
         
-        # Get selected member data
-        selected_username = tree.item(selection[0])['values'][0]
-        all_members = admin.search_members("")  # Get all members to find the selected one
-        selected_member = None
-        
-        for member in all_members:
-            if member.get('username') == selected_username:
-                selected_member = member
-                break
-        
-        if selected_member:
-            show_edit_form(selected_member)
+        if admin.update_member(member_username, values):
+            messagebox.showinfo("Success", "Member information updated successfully!")
+            load_all_members()
+            cancel_edit() # SỬA LỖI: Gọi hàm cancel_edit
+        else:
+            messagebox.showerror("Error", "Failed to update member information!")
 
-    def show_edit_form(member):
-        """Show the edit form with member data"""
-        # Clear previous edit frame
-        for widget in edit_frame.winfo_children():
-            widget.destroy()
-        
-        edit_frame.pack(fill="both", expand=True, pady=10)
-        
-        # Title for edit section
-       
-        
-        # Create form fields
-        fields = [
-            ("First Name", "f_name", "entry"),
-            ("Last Name", "l_name", "entry"),
-            ("Phone", "phone", "entry"),
-            ("Address", "address", "entry"),
-            ("Email", "email", "entry"),
-        ]
-        
-        entries = {}
-        start_y = 0.01
-        step_y = 0.08
-        
-        # Create regular entry fields
-        for i, (label_text, key, field_type) in enumerate(fields):
-            y = start_y + i * step_y
-            label = tk.Label(edit_frame, text=label_text, bg=root["bg"], font=("Arial", 10))
-            label.place(relx=0.1, rely=y, anchor="w")
-            
-            if field_type == "entry":
-                entry = tk.Entry(edit_frame, font=("Arial", 10))
-                entry.insert(0, member.get(key, ""))
-                entry.place(relx=0.4, rely=y, anchor="w", width=200)
-                entries[key] = entry
-        
-        # Gender selection
-        gender_label = tk.Label(edit_frame, text="Gender", bg=root["bg"], font=("Arial", 10))
-        gender_label.place(relx=0.1, rely=start_y + len(fields) * step_y, anchor="w")
-        
-        gender_var = tk.StringVar(value=member.get('gender', 'male'))
-        gender_frame = tk.Frame(edit_frame, bg=root["bg"])
-        gender_frame.place(relx=0.4, rely=start_y + len(fields) * step_y, anchor="w")
-        
-        male_radio = tk.Radiobutton(gender_frame, text="Male", variable=gender_var, value="male", bg=root["bg"])
-        male_radio.pack(side="left", padx=(0, 20))
-        female_radio = tk.Radiobutton(gender_frame, text="Female", variable=gender_var, value="female", bg=root["bg"])
-        female_radio.pack(side="left")
-        entries["gender"] = gender_var
-        
-        # Date of Birth calendar
-        dob_label = tk.Label(edit_frame, text="Date of Birth", bg=root["bg"], font=("Arial", 10))
-        dob_label.place(relx=0.1, rely=start_y + (len(fields) + 1) * step_y, anchor="w")
-        
-        try:
-            dob_date = datetime.strptime(member.get('date_of_birth', '2000-01-01'), '%Y-%m-%d')
-        except:
-            dob_date = datetime(2000, 1, 1)
-            
-        dob_calendar = DateEntry(edit_frame, width=20, background='darkblue', foreground='white', 
-                               borderwidth=2, date_pattern='yyyy-mm-dd', maxdate=datetime.now(),
-                               year=dob_date.year, month=dob_date.month, day=dob_date.day,
-                               firstweekday='sunday', showweeknumbers=False, selectmode='day')
-        dob_calendar.place(relx=0.4, rely=start_y + (len(fields) + 1) * step_y, anchor="w")
-        entries["date_of_birth"] = dob_calendar
-        
-        # Joined Date calendar
-        joined_label = tk.Label(edit_frame, text="Joined Date", bg=root["bg"], font=("Arial", 10))
-        joined_label.place(relx=0.1, rely=start_y + (len(fields) + 2) * step_y, anchor="w")
-        
-        try:
-            joined_date = datetime.strptime(member.get('joined_date', datetime.now().strftime('%Y-%m-%d')), '%Y-%m-%d')
-        except:
-            joined_date = datetime.now()
-            
-        joined_calendar = DateEntry(edit_frame, width=20, background='darkblue', foreground='white', 
-                                  borderwidth=2, date_pattern='yyyy-mm-dd', maxdate=datetime.now(),
-                                  year=joined_date.year, month=joined_date.month, day=joined_date.day,
-                                  firstweekday='sunday', showweeknumbers=False, selectmode='day')
-        joined_calendar.place(relx=0.4, rely=start_y + (len(fields) + 2) * step_y, anchor="w")
-        entries["joined_date"] = joined_calendar
-        
-        # Membership dropdown
-        membership_label = tk.Label(edit_frame, text="Membership", bg=root["bg"], font=("Arial", 10))
-        membership_label.place(relx=0.1, rely=start_y + (len(fields) + 3) * step_y, anchor="w")
-        
-        membership_options = ["1 Months", "3 Months", "6 Months", "12 Months", "36 Months", "Lifetime"]
-        membership_var = tk.StringVar(value=member.get('membership', membership_options[0]))
-        membership_dropdown = ttk.Combobox(edit_frame, textvariable=membership_var, values=membership_options, 
-                                          state="readonly", width=17)
-        membership_dropdown.place(relx=0.4, rely=start_y + (len(fields) + 3) * step_y, anchor="w")
-        entries["membership"] = membership_var
-        
-        # Trainer selection
-        trainer_label = tk.Label(edit_frame, text="Trainer Username", bg=root["bg"], font=("Arial", 10))
-        trainer_label.place(relx=0.1, rely=start_y + (len(fields) + 4) * step_y, anchor="w")
-        trainer_list = load_trainers()
-        trainer_usernames = [t[0] for t in trainer_list]
-        trainer_display = [f"{t[1]} ({t[0]})" for t in trainer_list]
-        trainer_var = tk.StringVar(value=member.get('trainer_username', trainer_usernames[0] if trainer_usernames else ""))
-        trainer_dropdown = ttk.Combobox(edit_frame, textvariable=trainer_var, values=trainer_usernames, state="readonly", width=17)
-        trainer_dropdown.place(relx=0.4, rely=start_y + (len(fields) + 4) * step_y, anchor="w")
-        entries["trainer_username"] = trainer_var
-        
-        # Subscription expiry calendar
-        expiry_label = tk.Label(edit_frame, text="Subscription Expiry", bg=root["bg"], font=("Arial", 10))
-        expiry_label.place(relx=0.1, rely=start_y + (len(fields) + 5) * step_y, anchor="w")
-        
-        try:
-            expiry_date = datetime.strptime(member.get('subscription_expiry', datetime.now().strftime('%Y-%m-%d')), '%Y-%m-%d')
-        except:
-            expiry_date = datetime.now()
-            
-        expiry_calendar = DateEntry(edit_frame, width=20, background='darkblue', foreground='white', 
-                                   borderwidth=2, date_pattern='yyyy-mm-dd',
-                                   year=expiry_date.year, month=expiry_date.month, day=expiry_date.day,
-                                   firstweekday='sunday', showweeknumbers=False, selectmode='day')
-        expiry_calendar.place(relx=0.4, rely=start_y + (len(fields) + 5) * step_y, anchor="w")
-        entries["subscription_expiry"] = expiry_calendar
-        
-        def update_expiry_date(*args):
-            """Update subscription expiry date based on membership selection"""
-            membership = membership_var.get()
-            joined_date = joined_calendar.get_date()
-            
-            duration_map = {
-                "1 Months": 30,
-                "3 Months": 90,
-                "6 Months": 180,
-                "12 Months": 365,
-                "36 Months": 365*3,
-                "Lifetime": 365*100
-            }
-            days = duration_map.get(membership, 30)
-            expiry_date = joined_date + timedelta(days=days)
-            expiry_calendar.set_date(expiry_date)
-        
-        membership_var.trace('w', update_expiry_date)
-        
-        def save_changes():
-            """Save the edited member information using admin method"""
-            values = {}
-            for key, entry in entries.items():
-                if key == "gender":
-                    values[key] = entry.get()
-                elif key in ["date_of_birth", "joined_date", "subscription_expiry"]:
-                    values[key] = entry.get_date().strftime('%Y-%m-%d')
-                else:
-                    values[key] = entry.get()
-            
-            if any(v == "" for v in values.values()):
-                messagebox.showerror("Error", "All fields must be filled!")
-                return
-            
-            # Use admin's update method
-            if admin.update_member(member.get('username'), values):
-                messagebox.showinfo("Success", "Member information updated successfully!")
-                # Refresh member list
-                load_all_members()
-                # Hide edit form
-                edit_frame.pack_forget()
-            else:
-                messagebox.showerror("Error", "Failed to update member information!")
-
-        def delete_member():
-            confirm = messagebox.askyesno("Confirm Delete", f"Are you sure you want to delete member '{member.get('username')}'?")
-            if not confirm:
-                return
-            if admin.delete_member(member.get('username')):
+    def delete_member(member_username, member_name):
+        if messagebox.askyesno("Confirm Delete", f"Are you sure you want to delete member '{member_name}' ({member_username})?"):
+            if admin.delete_member(member_username):
                 messagebox.showinfo("Success", "Member deleted successfully!")
                 load_all_members()
-                edit_frame.pack_forget()
+                cancel_edit() # SỬA LỖI: Gọi hàm cancel_edit
             else:
                 messagebox.showerror("Error", "Failed to delete member!")
 
-        # Button frame for Save, Delete, and Back buttons
-        button_frame = tk.Frame(edit_frame, bg=root["bg"])
-        button_frame.place(relx=0.8, rely=0.8, anchor="n")
+    def show_edit_form(member):
+        """TỐI ƯU: Chỉ cập nhật giá trị VÀ ẩn bảng results"""
+        
+        # SỬA LỖI: Ẩn bảng results để lấy không gian
+        results_frame.pack_forget()
 
-        save_btn = tk.Button(button_frame, text="Save Changes", command=save_changes,
-                            font=("Arial", 12, "bold"), bg="#4CAF50", fg="white",
-                            relief="raised", bd=2)
-        save_btn.pack(side="left", padx=10)
+        # Cập nhật Entry
+        for key in ["f_name", "l_name", "phone", "address", "email"]:
+            entries[key].delete(0, 'end')
+            entries[key].insert(0, member.get(key, ""))
+            
+        entries["gender"].set(member.get('gender', 'male'))
+        
+        try: dob_date = datetime.strptime(member.get('date_of_birth', '2000-01-01'), '%Y-%m-%d')
+        except: dob_date = datetime(2000, 1, 1)
+        entries["date_of_birth"].set_date(dob_date)
+        
+        try: joined_date = datetime.strptime(member.get('joined_date', datetime.now().strftime('%Y-%m-%d')), '%Y-%m-%d')
+        except: joined_date = datetime.now()
+        entries["joined_date"].set_date(joined_date)
+        
+        try: expiry_date = datetime.strptime(member.get('subscription_expiry', datetime.now().strftime('%Y-%m-%d')), '%Y-%m-%d')
+        except: expiry_date = datetime.now()
+        entries["subscription_expiry"].set_date(expiry_date)
+        
+        entries["membership"].set(member.get('membership', ''))
+        entries["trainer_username"].set(member.get('trainer_username', ''))
+        
+        username = member.get('username')
+        name = member.get('f_name', '')
+        entries["save_btn"].config(command=lambda u=username: save_changes(u))
+        entries["delete_btn"].config(command=lambda u=username, n=name: delete_member(u, n))
 
-        delete_btn = tk.Button(button_frame, text="Delete Member", command=delete_member,
-                              font=("Arial", 12, "bold"), bg="#f44336", fg="white",
-                              relief="raised", bd=2)
-        delete_btn.pack(side="left", padx=10)
+        # Hiển thị form
+        edit_frame.pack(fill="both", expand=True, pady=10)
 
-        def cancel_edit():
-            edit_frame.pack_forget()
+    def on_select_member(event):
+        selection = tree.selection()
+        if not selection: return
+        
+        selected_username = tree.item(selection[0])['values'][0]
+        all_members = admin.search_members("")
+        selected_member = next((m for m in all_members if m.get('username') == selected_username), None)
+        
+        if selected_member:
+            show_edit_form(selected_member) 
+            
+    # === Bắt đầu chạy ===
+    
+    create_edit_form_structure() # Tạo cấu trúc form (đang ẩn)
 
-        cancel_btn = tk.Button(button_frame, text="Cancel", command=cancel_edit,
-                              font=("Arial", 12, "bold"), bg="#888888", fg="white",
-                              relief="raised", bd=2)
-        cancel_btn.pack(side="left", padx=10)
-
-    # Search button
-    search_btn = tk.Button(search_frame, text="Search", command=search_members,
-                          font=("Arial", 12, "bold"), bg="#2196F3", fg="white",
-                          relief="raised", bd=2)
+    search_btn = ttk.Button(search_frame, text="Search", command=search_members, style="Primary.TButton")
     search_btn.pack(side="left", padx=10)
     
-    # Show all members button
-    show_all_btn = tk.Button(search_frame, text="Show All Members", command=load_all_members,
-                             font=("Arial", 12, "bold"), bg="#4CAF50", fg="white",
-                             relief="raised", bd=2)
+    show_all_btn = ttk.Button(search_frame, text="Show All Members", command=load_all_members, style="Success.TButton")
     show_all_btn.pack(side="left", padx=10)
     
-    # Bind tree selection event
     tree.bind("<<TreeviewSelect>>", on_select_member)
     
-    # Load all members when the window opens
+    back_btn = ttk.Button(main_frame, text="Back to Menu", command=root.destroy, style="Primary.TButton")
+    back_btn.pack(side="bottom", pady=10)
+    
     load_all_members()
-    
-    # Back to menu button
-    def back_to_menu():
-        root.destroy()
-    
-    back_btn = tk.Button(main_frame, text="Back to Menu", command=back_to_menu,
-                        font=("Arial", 14, "bold"), bg="#2196F3", fg="white",
-                        relief="raised", bd=2)
-    back_btn.pack(pady=1)

@@ -50,7 +50,9 @@
         "username": "khanhan",
         "attendance_days": [
             "2025-07-03",
-            "2025-07-04"
+            "2025-07-04",
+            "2025-11-04",
+            "2025-11-05"
         ],
         "workout_days": [
             [
@@ -87,7 +89,8 @@
         "username": "thanhhao",
         "attendance_days": [
             "2025-07-03",
-            "2025-07-04"
+            "2025-07-04",
+            "2025-11-04"
         ],
         "workout_days": [
             [
@@ -145,7 +148,8 @@
         "username": "phucdu",
         "attendance_days": [
             "2025-07-03",
-            "2025-07-04"
+            "2025-07-04",
+            "2025-11-04"
         ],
         "workout_days": [
             [
@@ -205,7 +209,8 @@
         "username": "d",
         "attendance_days": [
             "2025-07-03",
-            "2025-07-04"
+            "2025-07-04",
+            "2025-11-04"
         ],
         "workout_days": [
             [
@@ -252,26 +257,9 @@
         "subscription_expiry": "2026-07-23",
         "username": "anhanh",
         "attendance_days": [
-            "2025-07-24"
+            "2025-07-24",
+            "2025-11-05"
         ],
-        "workout_days": [],
-        "trainer_username": "johndoe"
-    },
-    {
-        "id": 10,
-        "f_name": "nhat hoa",
-        "l_name": "huynh",
-        "name": "nhat hoa huynh",
-        "gender": "male",
-        "phone": "0900",
-        "date_of_birth": "2000-01-01",
-        "joined_date": "2025-11-04",
-        "address": "123",
-        "email": "nha@as",
-        "membership": "1 Months",
-        "subscription_expiry": "2025-12-04",
-        "username": "aaa",
-        "attendance_days": [],
         "workout_days": [],
         "trainer_username": "johndoe"
     }

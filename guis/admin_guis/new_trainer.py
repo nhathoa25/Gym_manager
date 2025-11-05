@@ -4,73 +4,76 @@ from tkcalendar import DateEntry
 from datetime import datetime
 from models.admin import Admin
 
-
 def on_new_trainer(root, admin):
-    text_label = tk.Label(root, text="New trainer", font=("Arial", 24), bg=root["bg"])
-    text_label.place(relx=0.5, rely=0.1, anchor="n")
+    text_label = ttk.Label(root, text="New Trainer", font=("Arial", 24))
+    text_label.pack(pady=20)
 
-    # Create main frame for better organization
-    main_frame = tk.Frame(root, bg=root["bg"])
-    main_frame.place(relx=0.5, rely=0.2, anchor="n", relwidth=0.8, relheight=0.7)
-
-    # Define fields and their labels
-    fields = [
-        ("First Name", "f_name", "entry"),
-        ("Last Name", "l_name", "entry"),
-        ("Phone", "phone", "entry"),
-        ("Address", "address", "entry"),
-        ("Email", "email", "entry"),
-        ("Username", "username", "entry"),
-        ("Height (cm)", "height", "entry"),
-        ("Weight (kg)", "weight", "entry"),
-        ("Trainer ID", "trainer_id", "entry"),
-    ]
+    # Khung chính
+    main_frame = ttk.Frame(root)
+    main_frame.pack(fill="both", expand=True, padx=30, pady=20)
+    
+    # Khung cho form, sử dụng grid
+    form_frame = ttk.Frame(main_frame)
+    form_frame.pack(pady=10)
 
     entries = {}
-    start_y = 0.05
-    step_y = 0.07
 
-    # Create regular entry fields
-    for i, (label_text, key, field_type) in enumerate(fields):
-        y = start_y + i * step_y
-        label = tk.Label(main_frame, text=label_text, bg=root["bg"], font=("Arial", 10))
-        label.place(relx=0.1, rely=y, anchor="w")
-        if field_type == "entry":
-            entry = tk.Entry(main_frame, font=("Arial", 10))
-            entry.place(relx=0.4, rely=y, anchor="w", width=200)
-            entries[key] = entry
+    # --- Bố cục .grid() cho form ---
+    form_frame.columnconfigure(0, weight=1)
+    form_frame.columnconfigure(1, weight=2)
+    
+    fields = [
+        ("First Name", "f_name"), ("Last Name", "l_name"),
+        ("Phone", "phone"), ("Address", "address"),
+        ("Email", "email"), ("Username", "username"),
+        ("Height (cm)", "height"), ("Weight (kg)", "weight"),
+        ("Trainer ID", "trainer_id")
+    ]
 
-    # Gender selection with radio buttons
-    gender_label = tk.Label(main_frame, text="Gender", bg=root["bg"], font=("Arial", 10))
-    gender_label.place(relx=0.1, rely=start_y + len(fields) * step_y, anchor="w")
+    for i, (label_text, key) in enumerate(fields):
+        label = ttk.Label(form_frame, text=label_text, font=("Arial", 11))
+        label.grid(row=i, column=0, sticky="w", padx=10, pady=8)
+        
+        entry = ttk.Entry(form_frame, font=("Arial", 11), width=30)
+        entry.grid(row=i, column=1, sticky="w", padx=10, pady=8)
+        entries[key] = entry
+
+    row_index = len(fields)
+
+    # Gender
+    label = ttk.Label(form_frame, text="Gender", font=("Arial", 11))
+    label.grid(row=row_index, column=0, sticky="w", padx=10, pady=8)
+    
     gender_var = tk.StringVar(value="male")
-    gender_frame = tk.Frame(main_frame, bg=root["bg"])
-    gender_frame.place(relx=0.4, rely=start_y + len(fields) * step_y, anchor="w")
-    male_radio = tk.Radiobutton(gender_frame, text="Male", variable=gender_var, value="male", bg=root["bg"])
+    gender_frame = ttk.Frame(form_frame)
+    gender_frame.grid(row=row_index, column=1, sticky="w", padx=10, pady=8)
+    
+    male_radio = ttk.Radiobutton(gender_frame, text="Male", variable=gender_var, value="male")
     male_radio.pack(side="left", padx=(0, 20))
-    female_radio = tk.Radiobutton(gender_frame, text="Female", variable=gender_var, value="female", bg=root["bg"])
+    female_radio = ttk.Radiobutton(gender_frame, text="Female", variable=gender_var, value="female")
     female_radio.pack(side="left")
     entries["gender"] = gender_var
+    row_index += 1
 
-    # Date of Birth calendar
-    dob_label = tk.Label(main_frame, text="Date of Birth", bg=root["bg"], font=("Arial", 10))
-    dob_label.place(relx=0.1, rely=start_y + (len(fields) + 1) * step_y, anchor="w")
-    dob_calendar = DateEntry(main_frame, width=20, background='darkblue', foreground='white', 
+    # Date of Birth
+    label = ttk.Label(form_frame, text="Date of Birth", font=("Arial", 11))
+    label.grid(row=row_index, column=0, sticky="w", padx=10, pady=8)
+    dob_calendar = DateEntry(form_frame, width=28, background='darkblue', foreground='white', 
                            borderwidth=2, date_pattern='yyyy-mm-dd', maxdate=datetime.now(),
-                           year=2000, month=1, day=1, firstweekday='sunday',
-                           showweeknumbers=False, selectmode='day')
-    dob_calendar.place(relx=0.4, rely=start_y + (len(fields) + 1) * step_y, anchor="w")
+                           year=2000, month=1, day=1)
+    dob_calendar.grid(row=row_index, column=1, sticky="w", padx=10, pady=8)
     entries["date_of_birth"] = dob_calendar
+    row_index += 1
 
-    # Joined Date calendar
-    joined_label = tk.Label(main_frame, text="Joined Date", bg=root["bg"], font=("Arial", 10))
-    joined_label.place(relx=0.1, rely=start_y + (len(fields) + 2) * step_y, anchor="w")
-    joined_calendar = DateEntry(main_frame, width=20, background='darkblue', foreground='white', 
+    # Joined Date
+    label = ttk.Label(form_frame, text="Joined Date", font=("Arial", 11))
+    label.grid(row=row_index, column=0, sticky="w", padx=10, pady=8)
+    joined_calendar = DateEntry(form_frame, width=28, background='darkblue', foreground='white', 
                               borderwidth=2, date_pattern='yyyy-mm-dd', maxdate=datetime.now(),
-                              year=datetime.now().year, month=datetime.now().month, day=datetime.now().day,
-                              firstweekday='sunday', showweeknumbers=False, selectmode='day')
-    joined_calendar.place(relx=0.4, rely=start_y + (len(fields) + 2) * step_y, anchor="w")
+                              year=datetime.now().year, month=datetime.now().month, day=datetime.now().day)
+    joined_calendar.grid(row=row_index, column=1, sticky="w", padx=10, pady=8)
     entries["joined_date"] = joined_calendar
+    row_index += 1
 
     def submit():
         values = {}
@@ -81,37 +84,27 @@ def on_new_trainer(root, admin):
                 values[key] = entry.get_date().strftime('%Y-%m-%d')
             else:
                 values[key] = entry.get()
+                
         if any(v == "" for v in values.values()):
             messagebox.showerror("Error", "All fields must be filled!")
             return
-        # Create Admin instance and add trainer
+            
         if admin.new_trainer(values):
             messagebox.showinfo("Success", "Trainer added successfully!")
-            # Clear all fields after successful submission
             for key, entry in entries.items():
-                if key == "gender":
-                    entry.set("male")
-                elif key in ["date_of_birth", "joined_date"]:
-                    entry.set_date(datetime.now())
-                else:
-                    entry.delete(0, tk.END)
+                if key == "gender": entry.set("male")
+                elif key in ["date_of_birth"]: entry.set_date(datetime(2000, 1, 1))
+                elif key in ["joined_date"]: entry.set_date(datetime.now())
+                elif hasattr(entry, 'delete'): entry.delete(0, tk.END)
         else:
             messagebox.showerror("Error", "Failed to add trainer. Please try again.")
 
-    # Button frame for Submit and Back buttons
-    button_frame = tk.Frame(main_frame, bg=root["bg"])
-    button_frame.place(relx=0.5, rely=start_y + (len(fields) + 3.5) * step_y, anchor="n")
+    # Khung nút
+    button_frame = ttk.Frame(main_frame)
+    button_frame.pack(side="bottom", pady=20)
 
-    submit_btn = tk.Button(button_frame, text="Submit", command=submit, 
-                          font=("Arial", 12, "bold"), bg="#4CAF50", fg="white", 
-                          relief="raised", bd=2)
+    submit_btn = ttk.Button(button_frame, text="Submit", command=submit, style="Success.TButton")
     submit_btn.pack(side="left", padx=10)
 
-    def back_to_menu():
-        root.destroy()
-
-    back_btn = tk.Button(button_frame, text="Back to Menu", command=back_to_menu,
-                        font=("Arial", 12, "bold"), bg="#2196F3", fg="white",
-                        relief="raised", bd=2)
+    back_btn = ttk.Button(button_frame, text="Back to Menu", command=root.destroy, style="Primary.TButton")
     back_btn.pack(side="left", padx=10)
-

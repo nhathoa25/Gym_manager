@@ -15,6 +15,7 @@ def open_register_window():
     LABEL_FONT = ("Segoe UI", 12)
     ENTRY_FONT = ("Segoe UI", 12)
     BUTTON_FONT = ("Segoe UI", 13, "bold")
+    CHECK_FONT = ("Segoe UI", 10) # Font cho Checkbutton
 
     # Title
     title_label = tk.Label(
@@ -28,23 +29,53 @@ def open_register_window():
 
     # Form Frame
     form_frame = tk.Frame(root, bg="#ffffff", padx=30, pady=20, highlightbackground="#ccc", highlightthickness=1, relief="flat") 
-    form_frame.place(relx=0.5, rely=0.55, anchor="center", width=450, height=350)
+    form_frame.place(relx=0.5, rely=0.55, anchor="center", width=450, height=380) # Tăng nhẹ chiều cao form
     
     # Hàng 1: Username
-    tk.Label(form_frame, text="Username:", font=LABEL_FONT, bg="white", anchor="w").grid(row=0, column=0, sticky="w", pady=(15, 5), padx=5) # Dịch: Tên đăng nhập
+    tk.Label(form_frame, text="Username:", font=LABEL_FONT, bg="white", anchor="w").grid(row=0, column=0, sticky="w", pady=(15, 5), padx=5)
     username_entry = tk.Entry(form_frame, font=ENTRY_FONT, width=35, relief="flat", bg="#f7f7f7", bd=0) 
     username_entry.grid(row=1, column=0, sticky="ew", pady=(0, 15), padx=5, columnspan=2)
 
     # Hàng 2: Password
-    tk.Label(form_frame, text="Password:", font=LABEL_FONT, bg="white", anchor="w").grid(row=2, column=0, sticky="w", pady=(5, 5), padx=5) # Dịch: Mật khẩu
+    tk.Label(form_frame, text="Password:", font=LABEL_FONT, bg="white", anchor="w").grid(row=2, column=0, sticky="w", pady=(5, 5), padx=5)
     password_entry = tk.Entry(form_frame, font=ENTRY_FONT, width=35, show="*", relief="flat", bg="#f7f7f7", bd=0)
     password_entry.grid(row=3, column=0, sticky="ew", pady=(0, 15), padx=5, columnspan=2)
 
     # Hàng 3: Confirm Password
-    tk.Label(form_frame, text="Confirm Password:", font=LABEL_FONT, bg="white", anchor="w").grid(row=4, column=0, sticky="w", pady=(5, 5), padx=5) # Dịch: Xác nhận Mật khẩu
+    tk.Label(form_frame, text="Confirm Password:", font=LABEL_FONT, bg="white", anchor="w").grid(row=4, column=0, sticky="w", pady=(5, 5), padx=5)
     repassword_entry = tk.Entry(form_frame, font=ENTRY_FONT, width=35, show="*", relief="flat", bg="#f7f7f7", bd=0)
-    repassword_entry.grid(row=5, column=0, sticky="ew", pady=(0, 25), padx=5, columnspan=2)
+    repassword_entry.grid(row=5, column=0, sticky="ew", pady=(0, 5), padx=5, columnspan=2)
     
+    # --- SHOW PASSWORD CHECKBOX ---
+    
+    show_password_var = tk.StringVar(value="0") 
+    
+    def toggle_password_visibility():
+        if show_password_var.get() == "1":
+            # Nếu được check, hiện mật khẩu (show='')
+            password_entry.config(show="")
+            repassword_entry.config(show="")
+        else:
+            # Nếu không được check, ẩn mật khẩu (show='*')
+            password_entry.config(show="*")
+            repassword_entry.config(show="*")
+            
+    show_password_check = tk.Checkbutton(
+        form_frame,
+        text="Show Password",
+        font=CHECK_FONT,
+        bg="white",
+        fg="#444",
+        variable=show_password_var,
+        onvalue="1",
+        offvalue="0",
+        command=toggle_password_visibility,
+        relief="flat"
+    )
+    # Đặt Checkbutton ngay dưới ô nhập mật khẩu xác nhận, căn phải
+    show_password_check.grid(row=6, column=0, sticky="e", pady=(5, 10), padx=5, columnspan=2)
+    # *Note: Đã chuyển các entry xuống 1 row để chèn Checkbutton*
+
     form_frame.grid_columnconfigure(0, weight=1)
     form_frame.grid_columnconfigure(1, weight=1)
 
@@ -54,17 +85,14 @@ def open_register_window():
         password = password_entry.get()
         repassword = repassword_entry.get()
 
-        # Dịch: Vui lòng điền đầy đủ tất cả các trường.
         if not username or not password or not repassword:
             messagebox.showerror("Error", "All fields are required.")
             return
-        # Dịch: Mật khẩu xác nhận không khớp.
         if password != repassword:
             messagebox.showerror("Error", "Passwords do not match.")
             return
         
         try:
-            # Dịch: Tên đăng nhập đã tồn tại.
             if check_credentials(username, password) is not None:
                  messagebox.showerror("Error", "Username already exists.")
                  return
@@ -73,22 +101,21 @@ def open_register_window():
             
         try:
             add_user_to_json(username, password, "member")
-            # Dịch: Tài khoản đã được tạo thành công!
             messagebox.showinfo("Success", "Account created successfully!")
             root.destroy()
             from guis.login_window import open_login_window
             open_login_window()
-        # Dịch: Không thể tạo tài khoản. Lỗi: {e}
         except Exception as e:
             messagebox.showerror("Error", f"Could not create account. Error: {e}")
 
 
     # Button with hover
+    # Đặt nút Register vào row 7 (thay vì row 6 trước đây)
     register_button = tk.Button(
         form_frame,
-        text="Register", # Dịch: Đăng Ký
+        text="Register",
         font=BUTTON_FONT,
-        bg="#1877f2", 
+        bg="#1877f2", # Đã đổi màu xanh dương
         fg="white",
         activebackground="#0e62c2", 
         cursor="hand2",
@@ -98,7 +125,7 @@ def open_register_window():
         relief="flat", 
         bd=0
     )
-    register_button.grid(row=6, column=0, columnspan=2, pady=(15, 0), padx=5, sticky="n") 
+    register_button.grid(row=7, column=0, columnspan=2, pady=(15, 0), padx=5, sticky="n") 
     
     def on_enter(e):
         register_button.config(bg="#0e62c2")
@@ -108,10 +135,10 @@ def open_register_window():
     register_button.bind("<Leave>", on_leave)
 
     # Login link
-    info_label = tk.Label(root, text="Already have an account?", font=("Segoe UI", 11), bg=root["bg"]) # Dịch: Bạn đã có tài khoản?
+    info_label = tk.Label(root, text="Already have an account?", font=("Segoe UI", 11), bg=root["bg"]) 
     info_label.place(relx=0.5, y=550, anchor="e", x=-20) 
     
-    login_link = tk.Label(root, text="Login", font=("Segoe UI", 11, "underline"), fg="#1877f2", cursor="hand2", bg=root["bg"]) # Dịch: Đăng nhập
+    login_link = tk.Label(root, text="Login", font=("Segoe UI", 11, "underline"), fg="#1877f2", cursor="hand2", bg=root["bg"])
     login_link.place(relx=0.5, y=550, anchor="w", x=20)
 
     def go_to_login(event=None):

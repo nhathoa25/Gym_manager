@@ -17,6 +17,7 @@ def open_login_window():
     LABEL_FONT = ("Segoe UI", 12)
     ENTRY_FONT = ("Segoe UI", 12)
     BUTTON_FONT = ("Segoe UI", 13, "bold")
+    CHECK_FONT = ("Segoe UI", 10) # Font cho Checkbutton
 
     # Tiêu đề
     title_label = tk.Label(
@@ -28,21 +29,18 @@ def open_login_window():
     )
     title_label.place(relx=0.5, y=100, anchor="center")
 
-    # Form Frame - Viền mỏng bên ngoài vẫn giữ
+    # Form Frame
     form_frame = tk.Frame(root, bg="#ffffff", padx=30, pady=20, 
                           highlightbackground="#ccc", highlightthickness=1, 
                           relief="flat")
-    form_frame.place(relx=0.5, rely=0.5, anchor="center", width=450, height=300) # Điều chỉnh rely nhẹ để có không gian cho link bên dưới
+    form_frame.place(relx=0.5, rely=0.5, anchor="center", width=450, height=330) # Tăng nhẹ chiều cao form
 
     # --- INPUT FIELDS (Sử dụng GRID) ---
 
-    # Hàm tạo Entry field kiểu Underline (Đường viền dưới)
     def create_underline_entry(parent, show_char=""):
-        # Tạo Entry field PHẲNG hoàn toàn
         entry = tk.Entry(parent, font=ENTRY_FONT, width=35, 
                          relief="flat", bg="#ffffff", bd=0, 
                          highlightthickness=1, highlightbackground="#ccc", highlightcolor="#1877f2")
-        # Sử dụng thuộc tính highlight để tạo đường viền dưới mượt mà hơn
         if show_char:
             entry.config(show=show_char)
         return entry
@@ -52,15 +50,43 @@ def open_login_window():
     username_label.grid(row=0, column=0, sticky="w", pady=(15, 5), padx=5)
 
     username_entry = create_underline_entry(form_frame)
-    username_entry.grid(row=1, column=0, sticky="ew", pady=(0, 20), padx=5)
+    username_entry.grid(row=1, column=0, sticky="ew", pady=(0, 15), padx=5)
 
     # Password
     password_label = tk.Label(form_frame, text="Password:", font=LABEL_FONT, bg="white", anchor="w")
     password_label.grid(row=2, column=0, sticky="w", pady=(5, 5), padx=5)
 
     password_entry = create_underline_entry(form_frame, show_char="*")
-    password_entry.grid(row=3, column=0, sticky="ew", pady=(0, 25), padx=5)
+    password_entry.grid(row=3, column=0, sticky="ew", pady=(0, 5), padx=5)
     
+    # --- SHOW PASSWORD CHECKBOX ---
+    
+    show_password_var = tk.StringVar(value="0") # Biến lưu trạng thái checkbox (0: Ẩn, 1: Hiện)
+    
+    def toggle_password_visibility():
+        if show_password_var.get() == "1":
+            # Nếu được check, hiện mật khẩu (show='')
+            password_entry.config(show="")
+        else:
+            # Nếu không được check, ẩn mật khẩu (show='*')
+            password_entry.config(show="*")
+            
+    show_password_check = tk.Checkbutton(
+        form_frame,
+        text="Show Password",
+        font=CHECK_FONT,
+        bg="white",
+        fg="#444",
+        variable=show_password_var,
+        onvalue="1",
+        offvalue="0",
+        command=toggle_password_visibility,
+        relief="flat"
+    )
+    # Đặt Checkbutton ngay dưới ô nhập mật khẩu, căn phải
+    show_password_check.grid(row=4, column=0, sticky="e", pady=(5, 10), padx=5)
+
+
     form_frame.grid_columnconfigure(0, weight=1) 
 
     # --- BUTTON LOGIN ---
@@ -91,9 +117,10 @@ def open_login_window():
         relief="flat", 
         bd=0
     )
-    login_button.grid(row=4, column=0, pady=(15, 0), padx=5, sticky="n")
+    # Thay đổi row từ 4 sang 5 (vì đã thêm Checkbutton vào row 4)
+    login_button.grid(row=5, column=0, pady=(15, 0), padx=5, sticky="n")
 
-    # Thêm hiệu ứng hover
+    # Thêm hiệu ứng hover (giữ nguyên)
     def on_enter(e):
         login_button.config(bg="#0e62c2")
     def on_leave(e):
@@ -102,14 +129,11 @@ def open_login_window():
     login_button.bind("<Leave>", on_leave)
 
     # --- REGISTER LINK ---
-    # Điều chỉnh vị trí y để link nằm dưới khung form, không bị lấn vào
-    link_y_pos = form_frame.winfo_y() + 300 + 30 # y của form + height của form + padding
-    
     info_label = tk.Label(root, text="Don't have an account?", font=("Segoe UI", 11), bg=root["bg"]) 
-    info_label.place(relx=0.5, y=490, anchor="e", x=-20) 
+    info_label.place(relx=0.5, y=520, anchor="e", x=-20) # Điều chỉnh vị trí y xuống 520
 
     register_link = tk.Label(root, text="Register", font=("Segoe UI", 11, "underline"), fg="#1877f2", cursor="hand2", bg=root["bg"]) 
-    register_link.place(relx=0.5, y=490, anchor="w", x=20) 
+    register_link.place(relx=0.5, y=520, anchor="w", x=20) # Điều chỉnh vị trí y xuống 520
 
     def on_register(event=None):
         root.destroy()

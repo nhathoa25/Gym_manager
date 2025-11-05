@@ -1,7 +1,9 @@
 import tkinter as tk
+from tkinter import ttk
+from tkinter import font as tkFont
 from tkinter import messagebox
-from utils.create_icon import c_icon #add the function to create the icon
-from utils.create_background import c_background #add the function to create the background
+from utils.create_icon import c_icon
+from utils.create_background import c_background
 from guis.admin_guis.new_member import on_new_member
 from guis.admin_guis.new_trainer import on_new_trainer
 from guis.admin_guis.equipment_manager import on_equipment_manager
@@ -13,121 +15,184 @@ from guis.admin_guis.search_trainer import on_search_trainer
 from guis.admin_guis.add_attendance import on_add_attendance
 
 def open_admin_window(admin):
-    root = tk.Tk() #Create the main window
-    root.geometry(f"{root.winfo_screenwidth()}x{root.winfo_screenheight()}")
+    root = tk.Tk()
+    root.title("Gym Management System - Admin")
+    
+    # --- GỌI BACKGROUND CỦA BẠN LÊN TRÊN ĐẦU ---
     c_icon(root)
-    c_background(root) #set the background of the window
-    root.title("Gym Management System - Admin") #set the title of the window
+    c_background(root) 
+    
+    root.state('zoomed') 
+    
+    # --- Cấu hình Kiểu dáng (Styling) ---
+    style = ttk.Style()
+    style.theme_use('clam')
 
-    # Track the current sub-window
+    # Màu sắc
+    sidebar_bg = "#2c3e50"
+    button_fg = "#ffffff"
+    button_hover_bg = "#34495e"
+
+    style.configure("Sidebar.TFrame", background=sidebar_bg)
+    
+    # SỬA LỖI: Giảm padding ngang từ 20 xuống 15
+    style.configure("Nav.TButton",
+                    font=("Arial", 12, "bold"),
+                    background=sidebar_bg,
+                    foreground=button_fg,
+                    borderwidth=0,
+                    padding=(15, 10)) # <--- THAY ĐỔI
+    style.map("Nav.TButton",
+              background=[('active', button_hover_bg)],
+              foreground=[('active', button_fg)])
+
+    # SỬA LỖI: Giảm padding ngang từ 20 xuống 15
+    style.configure("Exit.TButton",
+                    font=("Arial", 12, "bold"),
+                    background="#e74c3c",
+                    foreground=button_fg,
+                    borderwidth=0,
+                    padding=(15, 10)) # <--- THAY ĐỔI
+    style.map("Exit.TButton",
+              background=[('active', "#c0392b")])
+
+    # --- Kết thúc Cấu hình Kiểu dáng ---
+
     current_sub_window = None
 
     def close_sub_window():
-        """Close the current sub-window if it exists"""
         nonlocal current_sub_window
         if current_sub_window and current_sub_window.winfo_exists():
             current_sub_window.destroy()
             current_sub_window = None
 
-    def open_new_member():
-        close_sub_window()  # Close any existing sub-window
+    def create_sub_window():
+        close_sub_window()
         nonlocal current_sub_window
         current_sub_window = tk.Toplevel(root)
-        current_sub_window.geometry(f"{root.winfo_screenwidth()}x{root.winfo_screenheight()}")
+        current_sub_window.transient(root)
+        current_sub_window.grab_set()
+        
         c_icon(current_sub_window)
-        c_background(current_sub_window)
-        on_new_member(current_sub_window, admin)
+        c_background(current_sub_window) 
+        
+        sub_style = ttk.Style(current_sub_window)
+        sub_style.theme_use('clam')
+        
+        sub_style.configure("TFrame", background=current_sub_window["bg"])
+        sub_style.configure("TLabel", background=current_sub_window["bg"])
+        sub_style.configure("TRadiobutton", background=current_sub_window["bg"])
+
+        sub_style.configure("TButton", font=("Arial", 12, "bold"), padding=5)
+        
+        sub_style.configure("Success.TButton", background="#4CAF50", foreground="white")
+        sub_style.map("Success.TButton", background=[('active', '#45a049')])
+        
+        sub_style.configure("Danger.TButton", background="#f44336", foreground="white")
+        sub_style.map("Danger.TButton", background=[('active', '#d32f2f')])
+        
+        sub_style.configure("Primary.TButton", background="#2196F3", foreground="white")
+        sub_style.map("Primary.TButton", background=[('active', '#1e88e5')])
+        
+        sub_style.configure("Warning.TButton", background="#FF9800", foreground="white")
+        sub_style.map("Warning.TButton", background=[('active', '#fb8c00')])
+
+        return current_sub_window
+
+    # --- Các hàm mở cửa sổ con (Không thay đổi) ---
+    def open_new_member():
+        window = create_sub_window()
+        on_new_member(window, admin)
     
     def open_new_trainer():
-        close_sub_window()  # Close any existing sub-window
-        nonlocal current_sub_window
-        current_sub_window = tk.Toplevel(root)
-        current_sub_window.geometry(f"{root.winfo_screenwidth()}x{root.winfo_screenheight()}")
-        c_icon(current_sub_window)
-        c_background(current_sub_window)
-        on_new_trainer(current_sub_window, admin)
+        window = create_sub_window()
+        on_new_trainer(window, admin)
     
     def open_equipment_manager():
-        close_sub_window()  # Close any existing sub-window
-        nonlocal current_sub_window
-        current_sub_window = tk.Toplevel(root)
-        current_sub_window.geometry(f"{root.winfo_screenwidth()}x{root.winfo_screenheight()}")
-        c_icon(current_sub_window)
-        c_background(current_sub_window)
-        on_equipment_manager(current_sub_window, admin)
+        window = create_sub_window()
+        on_equipment_manager(window, admin)
     
     def open_search_member():
-        close_sub_window()  # Close any existing sub-window
-        nonlocal current_sub_window
-        current_sub_window = tk.Toplevel(root)
-        current_sub_window.geometry(f"{root.winfo_screenwidth()}x{root.winfo_screenheight()}")
-        c_icon(current_sub_window)
-        c_background(current_sub_window)
-        on_search_member(current_sub_window, admin)
+        window = create_sub_window()
+        on_search_member(window, admin)
 
     def open_manage_subscription():
-        close_sub_window()  # Close any existing sub-window
-        nonlocal current_sub_window
-        current_sub_window = tk.Toplevel(root)
-        current_sub_window.geometry(f"{root.winfo_screenwidth()}x{root.winfo_screenheight()}")
-        c_icon(current_sub_window)
-        c_background(current_sub_window)
-        on_manage_subscription(current_sub_window, admin)
+        window = create_sub_window()
+        on_manage_subscription(window, admin)
 
     def open_cal_revenue():
-        close_sub_window()  # Close any existing sub-window
-        nonlocal current_sub_window
-        current_sub_window = tk.Toplevel(root)
-        current_sub_window.geometry(f"{root.winfo_screenwidth()}x{root.winfo_screenheight()}")
-        c_icon(current_sub_window)
-        c_background(current_sub_window)
-        on_cal_revenue(current_sub_window, admin)
+        window = create_sub_window()
+        on_cal_revenue(window, admin)
 
     def open_search_trainer():
-        close_sub_window()  # Close any existing sub-window
-        nonlocal current_sub_window
-        current_sub_window = tk.Toplevel(root)
-        current_sub_window.geometry(f"{root.winfo_screenwidth()}x{root.winfo_screenheight()}")
-        c_icon(current_sub_window)
-        c_background(current_sub_window)
-        on_search_trainer(current_sub_window, admin)
+        window = create_sub_window()
+        on_search_trainer(window, admin)
 
     def open_add_attendance():
-        close_sub_window()  # Close any existing sub-window
-        nonlocal current_sub_window
-        current_sub_window = tk.Toplevel(root)
-        current_sub_window.geometry(f"{root.winfo_screenwidth()}x{root.winfo_screenheight()}")
-        c_icon(current_sub_window)
-        c_background(current_sub_window)
-        on_add_attendance(current_sub_window, admin)
+        window = create_sub_window()
+        on_add_attendance(window, admin)
 
-    # Create buttons with the specified text
-    btn_new_member = tk.Button(root, text="New Member", command=open_new_member)
-    btn_new_member.place(x=50, y=50, width=150, height=40)
-
-    btn_new_trainer = tk.Button(root, text="New Trainer", command=open_new_trainer)
-    btn_new_trainer.place(x=200, y=50, width=150, height=40)
-
-    btn_equipment = tk.Button(root, text="Equipment", command=open_equipment_manager)
-    btn_equipment.place(x=350, y=50, width=150, height=40)
-
-    btn_search_member = tk.Button(root, text="Edit-Report Mem", command=open_search_member)
-    btn_search_member.place(x=500, y=50, width=150, height=40)
-
-
-    btn_subscription_plans = tk.Button(root, text="Subscription plans", command=open_manage_subscription)
-    btn_subscription_plans.place(x=650, y=50, width=150, height=40)
-
-    btn_cal_revenue = tk.Button(root, text="Revenue Report", command=open_cal_revenue)
-    btn_cal_revenue.place(x=1100, y=50, width=150, height=40)
-
-    btn_search_trainer = tk.Button(root, text="Edit Trainer", command=open_search_trainer)
-    btn_search_trainer.place(x=800, y=50, width=150, height=40)
-
-    btn_add_attendance = tk.Button(root, text="Add-Report Attendance", command=open_add_attendance)
-    btn_add_attendance.place(x=950, y=50, width=150, height=40)
-
-    btn_exit = tk.Button(root, text="Exit", command=root.destroy)
-    btn_exit.place(x=1250, y=50, width=150, height=40)
+    # --- Bố cục (Layout) ---
     
+    # SỬA LỖI: Tăng độ rộng sidebar từ 250 -> 280
+    sidebar_frame = ttk.Frame(root, width=280, style="Sidebar.TFrame") # <--- THAY ĐỔI
+    sidebar_frame.pack(side=tk.LEFT, fill=tk.Y)
+    sidebar_frame.pack_propagate(False) 
+
+    main_frame = tk.Frame(root) 
+    main_frame.pack(side=tk.RIGHT, fill=tk.BOTH, expand=True)
+
+    # --- Thêm widget vào Sidebar ---
+    title_font = tkFont.Font(family="Arial", size=18, weight="bold")
+    title_label = tk.Label(sidebar_frame, 
+                           text="Admin Menu", 
+                           font=title_font, 
+                           bg=sidebar_bg, 
+                           fg="#ffffff", 
+                           pady=20)
+    title_label.pack(pady=(10, 20))
+    
+    # SỬA LỖI: Giảm padx từ 20 -> 15
+    btn_new_member = ttk.Button(sidebar_frame, text="New Member", command=open_new_member, style="Nav.TButton")
+    btn_new_member.pack(fill=tk.X, pady=5, padx=15) # <--- THAY ĐỔI
+    
+    btn_new_trainer = ttk.Button(sidebar_frame, text="New Trainer", command=open_new_trainer, style="Nav.TButton")
+    btn_new_trainer.pack(fill=tk.X, pady=5, padx=15) # <--- THAY ĐỔI
+    
+    btn_equipment = ttk.Button(sidebar_frame, text="Equipment", command=open_equipment_manager, style="Nav.TButton")
+    btn_equipment.pack(fill=tk.X, pady=5, padx=15) # <--- THAY ĐỔI
+    
+    btn_search_member = ttk.Button(sidebar_frame, text="Edit/Report Member", command=open_search_member, style="Nav.TButton")
+    btn_search_member.pack(fill=tk.X, pady=5, padx=15) # <--- THAY ĐỔI
+    
+    btn_subscription_plans = ttk.Button(sidebar_frame, text="Subscription Plans", command=open_manage_subscription, style="Nav.TButton")
+    btn_subscription_plans.pack(fill=tk.X, pady=5, padx=15) # <--- THAY ĐỔI
+    
+    btn_search_trainer = ttk.Button(sidebar_frame, text="Edit Trainer", command=open_search_trainer, style="Nav.TButton")
+    btn_search_trainer.pack(fill=tk.X, pady=5, padx=15) # <--- THAY ĐỔI
+    
+    btn_add_attendance = ttk.Button(sidebar_frame, text="Add/Report Attendance", command=open_add_attendance, style="Nav.TButton")
+    btn_add_attendance.pack(fill=tk.X, pady=5, padx=15) # <--- THAY ĐỔI
+    
+    btn_cal_revenue = ttk.Button(sidebar_frame, text="Revenue Report", command=open_cal_revenue, style="Nav.TButton")
+    btn_cal_revenue.pack(fill=tk.X, pady=5, padx=15) # <--- THAY ĐỔI
+    
+    btn_exit = ttk.Button(sidebar_frame, text="Exit", command=root.destroy, style="Exit.TButton")
+    btn_exit.pack(side=tk.BOTTOM, fill=tk.X, pady=20, padx=15) # <--- THAY ĐỔI
+    
+    # --- Thêm widget vào Main Frame ---
+    welcome_font = tkFont.Font(family="Arial", size=24, weight="bold")
+    welcome_label = tk.Label(main_frame, 
+                              text="Chào mừng Admin!", 
+                              font=welcome_font,
+                              fg="#333333") 
+    welcome_label.pack(pady=50)
+
+    info_font = tkFont.Font(family="Arial", size=14)
+    info_label = tk.Label(main_frame, 
+                           text="Vui lòng chọn một chức năng từ menu bên trái.", 
+                           font=info_font,
+                           fg="#333333")
+    info_label.pack(pady=10)
+
     root.mainloop()

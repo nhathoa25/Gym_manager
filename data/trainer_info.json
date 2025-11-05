@@ -58,21 +58,6 @@
         ]
     },
     {
-        "f_name": "aaaaaaaaa",
-        "l_name": "aaaaaaa",
-        "gender": "male",
-        "phone": "aaaaaaaaa",
-        "date_of_birth": "2000-01-01",
-        "joined_date": "2025-07-12",
-        "address": "aaaa",
-        "email": "aaaaa",
-        "username": "aaaaaaa",
-        "height": 180,
-        "weight": 80,
-        "trainer_id": 4,
-        "member_username": []
-    },
-    {
         "id": 7,
         "f_name": "tr",
         "l_name": "tr",
