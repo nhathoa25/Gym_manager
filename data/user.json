@@ -38,5 +38,10 @@
         "username": "hoahn@123.com",
         "password": "12345",
         "role": "member"
+    },
+    {
+        "username": "aaa",
+        "password": "aaa",
+        "role": "member"
     }
 ]

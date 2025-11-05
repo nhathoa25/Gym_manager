@@ -183,14 +183,14 @@ def open_admin_window(admin):
     # --- Thêm widget vào Main Frame ---
     welcome_font = tkFont.Font(family="Arial", size=24, weight="bold")
     welcome_label = tk.Label(main_frame, 
-                              text="Chào mừng Admin!", 
+                              text="Welcome Admin!", 
                               font=welcome_font,
                               fg="#333333") 
     welcome_label.pack(pady=50)
 
     info_font = tkFont.Font(family="Arial", size=14)
     info_label = tk.Label(main_frame, 
-                           text="Vui lòng chọn một chức năng từ menu bên trái.", 
+                           text="Please select a function from the menu on the left.", 
                            font=info_font,
                            fg="#333333")
     info_label.pack(pady=10)

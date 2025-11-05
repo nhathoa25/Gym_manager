@@ -70,6 +70,10 @@
             [
                 "2025-07-23",
                 "hit dat 900 c\u00e1i"
+            ],
+            [
+                "2025-11-05",
+                "11"
             ]
         ],
         "trainer_username": "johndoe"
@@ -260,6 +264,24 @@
             "2025-07-24",
             "2025-11-05"
         ],
+        "workout_days": [],
+        "trainer_username": "johndoe"
+    },
+    {
+        "id": 10,
+        "f_name": "aaa",
+        "l_name": "aaa",
+        "name": "aaa aaa",
+        "gender": "male",
+        "phone": "aaa",
+        "date_of_birth": "2000-01-01",
+        "joined_date": "2025-11-05",
+        "address": "aaa",
+        "email": "aaa",
+        "membership": "1 Months",
+        "subscription_expiry": "2025-12-05",
+        "username": "aaa",
+        "attendance_days": [],
         "workout_days": [],
         "trainer_username": "johndoe"
     }
