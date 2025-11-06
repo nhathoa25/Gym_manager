@@ -117,11 +117,11 @@ def open_trainer_window(trainer):
     btn_view_member_info = tk.Button(root, text="View Member Info", command=open_view_member_info)
     btn_view_member_info.place(x=800, y=50, width=200, height=40)
 
-    # btn_progress_tracking = tk.Button(root, text="Progress Tracking", command=open_progress_tracking)
-    # btn_progress_tracking.place(x=1050, y=50, width=200, height=40)
+    btn_progress_tracking = tk.Button(root, text="Progress Tracking", command=open_progress_tracking)
+    btn_progress_tracking.place(x=1050, y=50, width=200, height=40)
 
-    # btn_top_member = tk.Button(root, text="Top Member", command=open_top_member)
-    # btn_top_member.place(x=1300, y=50, width=200, height=40)
+    btn_top_member = tk.Button(root, text="Top Member", command=open_top_member)
+    btn_top_member.place(x=1300, y=50, width=200, height=40)
 
     btn_exit = tk.Button(root, text="Exit", command=root.destroy)
     btn_exit.place(x=1550, y=50, width=150, height=40)
