@@ -104,26 +104,29 @@ def open_trainer_window(trainer):
         c_background(current_sub_window)
         on_top_member(current_sub_window, trainer)
 
-    # Create buttons with the specified text
-    btn_assign_workout = tk.Button(root, text="Assign Workout", command=open_assign_workout)
-    btn_assign_workout.place(x=50, y=50, width=200, height=40)
+    # Top toolbar for trainer actions
+    toolbar = tk.Frame(root, bg="", pady=10)
+    toolbar.pack(fill="x", padx=20, pady=20)
 
-    btn_attendance_tracking = tk.Button(root, text="Attendance Tracking", command=open_attendance_tracking)
-    btn_attendance_tracking.place(x=300, y=50, width=200, height=40)
+    btn_assign_workout = tk.Button(toolbar, text="Assign Workout", command=open_assign_workout, width=18)
+    btn_assign_workout.pack(side="left", padx=6)
 
-    btn_add_attendance = tk.Button(root, text="Add Attendance", command=open_add_attendance)
-    btn_add_attendance.place(x=550, y=50, width=200, height=40)
+    btn_attendance_tracking = tk.Button(toolbar, text="Attendance Tracking", command=open_attendance_tracking, width=18)
+    btn_attendance_tracking.pack(side="left", padx=6)
 
-    btn_view_member_info = tk.Button(root, text="View Member Info", command=open_view_member_info)
-    btn_view_member_info.place(x=800, y=50, width=200, height=40)
+    btn_add_attendance = tk.Button(toolbar, text="Add Attendance", command=open_add_attendance, width=18)
+    btn_add_attendance.pack(side="left", padx=6)
 
-    btn_progress_tracking = tk.Button(root, text="Progress Tracking", command=open_progress_tracking)
-    btn_progress_tracking.place(x=1050, y=50, width=200, height=40)
+    btn_view_member_info = tk.Button(toolbar, text="View Member Info", command=open_view_member_info, width=18)
+    btn_view_member_info.pack(side="left", padx=6)
 
-    btn_top_member = tk.Button(root, text="Top Member", command=open_top_member)
-    btn_top_member.place(x=1300, y=50, width=200, height=40)
+    btn_progress_tracking = tk.Button(toolbar, text="Progress Tracking", command=open_progress_tracking, width=18)
+    btn_progress_tracking.pack(side="left", padx=6)
 
-    btn_exit = tk.Button(root, text="Exit", command=root.destroy)
-    btn_exit.place(x=1550, y=50, width=150, height=40)
+    btn_top_member = tk.Button(toolbar, text="Top Member", command=open_top_member, width=14)
+    btn_top_member.pack(side="left", padx=6)
+
+    btn_exit = tk.Button(toolbar, text="Exit", command=root.destroy, width=12)
+    btn_exit.pack(side="right", padx=6)
     
     root.mainloop()

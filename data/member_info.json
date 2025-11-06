@@ -69,7 +69,7 @@
             ],
             [
                 "2025-07-23",
-                "hit dat 900 c\u00e1i"
+                "hit dat 900 cái"
             ],
             [
                 "2025-11-05",
@@ -176,7 +176,7 @@
         "phone": "0123123123",
         "date_of_birth": "2006-01-01",
         "joined_date": "2025-07-22",
-        "address": "c\u00e2y \u0110a, \u0111\u1ea7u L\u00e0ng, x\u00f3m Mai",
+        "address": "cây Đa, đầu Làng, xóm Mai",
         "email": "emo@gmail.com",
         "membership": "12 Months",
         "subscription_expiry": "2026-07-21",
@@ -237,7 +237,7 @@
         "phone": "123123123123",
         "date_of_birth": "2000-01-05",
         "joined_date": "2025-07-22",
-        "address": "l\u00f2ng \u0110\u1ea5t, con Giun, Con Heo",
+        "address": "lòng Đất, con Giun, Con Heo",
         "email": "aloalo@gmail.com",
         "membership": "3 Months",
         "subscription_expiry": "2025-10-20",
@@ -255,7 +255,7 @@
         "phone": "6868686868",
         "date_of_birth": "2000-01-05",
         "joined_date": "2025-07-23",
-        "address": "c\u00e2y \u0111a",
+        "address": "cây đa",
         "email": "conheo@gmail.com",
         "membership": "12 Months",
         "subscription_expiry": "2026-07-23",
@@ -278,8 +278,8 @@
         "joined_date": "2025-11-05",
         "address": "aaa",
         "email": "aaa",
-        "membership": "1 Months",
-        "subscription_expiry": "2025-12-05",
+        "membership": "12 Months",
+        "subscription_expiry": "2027-01-11",
         "username": "aaa",
         "attendance_days": [],
         "workout_days": [],

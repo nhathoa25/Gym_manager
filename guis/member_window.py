@@ -3,6 +3,7 @@ from utils.create_icon import c_icon
 from utils.create_background import c_background
 from guis.member_guis.check_info import show_member_info_window
 from guis.member_guis.view_subscription import show_member_subscription_window
+from guis.member_guis.renew_subscription import show_renew_subscription_window
 import os
 import json
 from guis.member_guis.contact import show_contact_window
@@ -23,8 +24,9 @@ def on_check_workout_schedule(root, member):
     show_member_workout_window(username, window=root)
 
 def on_renew_subscribe_plan(root, member):
-    root.title("Renew/Subscribe to New Plan")
-    tk.Label(root, text="Renew or Subscribe to New Plan (placeholder)", font=("Arial", 24)).pack(pady=50)
+    # Open the renew/subscribe GUI for this member
+    username = member.username if hasattr(member, 'username') else member['username']
+    show_renew_subscription_window(username, window=root)
 
 def on_contact_trainers_admin(root, member):
     # Use member method to show contact info
@@ -72,6 +74,7 @@ def open_member_window(member):
         current_sub_window.geometry(f"{root.winfo_screenwidth()}x{root.winfo_screenheight()}")
         c_icon(current_sub_window)
         c_background(current_sub_window)
+        # Use the new renew subscription window
         on_renew_subscribe_plan(current_sub_window, member)
 
     def open_contact_trainers_admin():
@@ -79,22 +82,26 @@ def open_member_window(member):
         username = member.username if hasattr(member, 'username') else member['username']
         show_contact_window(username)
 
-    btn_view_profile = tk.Button(root, text="View Profile", command=open_view_profile)
-    btn_view_profile.place(x=50, y=50, width=250, height=40)
+    # Top toolbar for member actions (responsive)
+    toolbar = tk.Frame(root, bg="", pady=10)
+    toolbar.pack(fill="x", padx=20, pady=20)
 
-    btn_view_subscription = tk.Button(root, text="View Subscription Plan", command=open_view_subscription)
-    btn_view_subscription.place(x=350, y=50, width=250, height=40)
+    btn_view_profile = tk.Button(toolbar, text="View Profile", command=open_view_profile, width=22)
+    btn_view_profile.pack(side="left", padx=6)
 
-    btn_check_workout = tk.Button(root, text="Check Workout Schedule", command=open_check_workout_schedule)
-    btn_check_workout.place(x=650, y=50, width=250, height=40)
+    btn_view_subscription = tk.Button(toolbar, text="View Subscription Plan", command=open_view_subscription, width=22)
+    btn_view_subscription.pack(side="left", padx=6)
 
-    btn_renew_subscribe = tk.Button(root, text="Renew/Subscribe to New Plan", command=open_renew_subscribe_plan)
-    btn_renew_subscribe.place(x=950, y=50, width=250, height=40)
+    btn_check_workout = tk.Button(toolbar, text="Check Workout Schedule", command=open_check_workout_schedule, width=22)
+    btn_check_workout.pack(side="left", padx=6)
 
-    btn_contact = tk.Button(root, text="Contact Trainers / Admin", command=open_contact_trainers_admin)
-    btn_contact.place(x=1250, y=50, width=250, height=40)
+    btn_renew_subscribe = tk.Button(toolbar, text="Renew/Subscribe to New Plan", command=open_renew_subscribe_plan, width=26)
+    btn_renew_subscribe.pack(side="left", padx=6)
 
-    btn_exit = tk.Button(root, text="Exit", command=root.destroy)
-    btn_exit.place(x=1550, y=50, width=150, height=40)
+    btn_contact = tk.Button(toolbar, text="Contact Trainers / Admin", command=open_contact_trainers_admin, width=24)
+    btn_contact.pack(side="left", padx=6)
+
+    btn_exit = tk.Button(toolbar, text="Exit", command=root.destroy, width=12)
+    btn_exit.pack(side="right", padx=6)
 
     root.mainloop()
